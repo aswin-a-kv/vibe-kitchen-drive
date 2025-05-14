@@ -1,0 +1,24 @@
+<div class="filter-chip" [class.open]="isOpen">
+  <button class="chip-button" (click)="toggleDropdown($event)">
+    <span class="chip-icon" [innerHTML]="safeIconSvgPath"></span>
+    <span class="chip-label">{{ label }}</span>
+    <span class="chip-arrow">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="18"
+        viewBox="0 0 24 24"
+        width="18"
+      >
+        <path d="M7 10l5 5 5-5z" fill="currentColor" />
+      </svg>
+    </span>
+  </button>
+  <div
+    class="dropdown-content"
+    *ngIf="isOpen"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Dropdown options will be passed as content projection -->
+    <ng-content></ng-content>
+  </div>
+</div>

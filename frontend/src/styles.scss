@@ -1,0 +1,76 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Product Sans Font Family */
+@font-face {
+  font-family: "Product Sans";
+  src: url("./assets/fonts/ProductSans-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Product Sans";
+  src: url("./assets/fonts/ProductSans-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Product Sans";
+  src: url("./assets/fonts/ProductSans-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Product Sans";
+  src: url("./assets/fonts/ProductSans-BoldItalic.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Product Sans";
+  src: url("./assets/fonts/ProductSans-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Product Sans";
+  src: url("./assets/fonts/ProductSans-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Product Sans";
+  src: url("./assets/fonts/ProductSans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Product Sans";
+  src: url("./assets/fonts/ProductSans-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* Apply font to the entire application */
+html,
+body {
+  font-family: "Product Sans", sans-serif;
+  background: #f8fafd;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+* {
+  font-family: "Product Sans", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}

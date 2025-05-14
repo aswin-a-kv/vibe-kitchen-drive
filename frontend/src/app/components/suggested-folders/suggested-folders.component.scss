@@ -1,0 +1,59 @@
+.accordion-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .accordion-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+
+      .toggle-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 8px;
+        transition: transform 0.3s ease;
+        color: #5f6368;
+
+        &.expanded {
+          transform: rotate(90deg);
+        }
+      }
+
+      .accordion-title {
+        font-size: 18px;
+        font-weight: 500;
+        color: #3c4043;
+        margin: 0;
+      }
+    }
+  }
+
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+
+    &.expanded {
+      max-height: 800px; // Adjust based on expected content height
+    }
+
+    .folders-grid {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 16px;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

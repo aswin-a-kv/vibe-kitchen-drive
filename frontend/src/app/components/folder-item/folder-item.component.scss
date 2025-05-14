@@ -1,0 +1,76 @@
+.folder-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  width: 300px;
+  background-color: #f0f4f9;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f1f3f4;
+  }
+
+  .folder-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    // Different colors for different folder types
+    &.folder {
+      color: #5f6368;
+    }
+
+    &.shared {
+      color: #5f6368;
+    }
+
+    &.document {
+      color: #3c4043;
+    }
+  }
+
+  .folder-info {
+    flex: 1;
+
+    .folder-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #3c4043;
+      margin-bottom: 4px;
+    }
+
+    .folder-location {
+      font-size: 12px;
+      color: #5f6368;
+    }
+  }
+
+  .folder-menu {
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5f6368;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: background-color 0.2s, opacity 0.2s;
+
+    &:hover {
+      background-color: rgba(95, 99, 104, 0.1);
+      opacity: 1;
+    }
+  }
+}

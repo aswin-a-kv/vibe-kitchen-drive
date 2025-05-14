@@ -1,0 +1,40 @@
+@import "../../styles/colors.scss";
+
+.searchbar-container {
+  display: flex;
+  align-items: center;
+  background: #e9eef6;
+  border-radius: 24px;
+  padding: 12px 16px;
+  width: 100%;
+  width: 830px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+
+  .search-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+    color: #5f6368;
+  }
+
+  .search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    outline: none;
+    color: #3c4043;
+
+    &::placeholder {
+      color: #323335;
+    }
+  }
+
+  &:focus-within,
+  &.focused {
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 6px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e1e1e1;
+  }
+}

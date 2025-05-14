@@ -1,0 +1,189 @@
+<div class="filter-chips-container">
+  <!-- Type Filter -->
+  <app-filter-chip
+    #typeChip
+    label="Type"
+    [iconSvgPath]="typeIcon"
+    (filterSelected)="handleFilterSelected($event, 'type')"
+  >
+    <div
+      class="dropdown-item"
+      (click)="
+        typeChip.selectFilter('Document'); selectFilter('Document', 'type')
+      "
+    >
+      Document
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        typeChip.selectFilter('Spreadsheet');
+        selectFilter('Spreadsheet', 'type')
+      "
+    >
+      Spreadsheet
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        typeChip.selectFilter('Presentation');
+        selectFilter('Presentation', 'type')
+      "
+    >
+      Presentation
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="typeChip.selectFilter('Image'); selectFilter('Image', 'type')"
+    >
+      Image
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="typeChip.selectFilter('PDF'); selectFilter('PDF', 'type')"
+    >
+      PDF
+    </div>
+  </app-filter-chip>
+
+  <!-- People Filter -->
+  <app-filter-chip
+    #peopleChip
+    label="People"
+    [iconSvgPath]="peopleIcon"
+    (filterSelected)="handleFilterSelected($event, 'people')"
+  >
+    <div
+      class="dropdown-item"
+      (click)="
+        peopleChip.selectFilter('Anyone'); selectFilter('Anyone', 'people')
+      "
+    >
+      Anyone
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        peopleChip.selectFilter('Owned by me');
+        selectFilter('Owned by me', 'people')
+      "
+    >
+      Owned by me
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        peopleChip.selectFilter('Not owned by me');
+        selectFilter('Not owned by me', 'people')
+      "
+    >
+      Not owned by me
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        peopleChip.selectFilter('Shared with me');
+        selectFilter('Shared with me', 'people')
+      "
+    >
+      Shared with me
+    </div>
+  </app-filter-chip>
+
+  <!-- Modified Filter -->
+  <app-filter-chip
+    #modifiedChip
+    label="Modified"
+    [iconSvgPath]="modifiedIcon"
+    (filterSelected)="handleFilterSelected($event, 'modified')"
+  >
+    <div
+      class="dropdown-item"
+      (click)="
+        modifiedChip.selectFilter('Today'); selectFilter('Today', 'modified')
+      "
+    >
+      Today
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        modifiedChip.selectFilter('Yesterday');
+        selectFilter('Yesterday', 'modified')
+      "
+    >
+      Yesterday
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        modifiedChip.selectFilter('Last 7 days');
+        selectFilter('Last 7 days', 'modified')
+      "
+    >
+      Last 7 days
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        modifiedChip.selectFilter('Last 30 days');
+        selectFilter('Last 30 days', 'modified')
+      "
+    >
+      Last 30 days
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        modifiedChip.selectFilter('This year');
+        selectFilter('This year', 'modified')
+      "
+    >
+      This year
+    </div>
+  </app-filter-chip>
+
+  <!-- Location Filter -->
+  <app-filter-chip
+    #locationChip
+    label="Location"
+    [iconSvgPath]="locationIcon"
+    (filterSelected)="handleFilterSelected($event, 'location')"
+  >
+    <div
+      class="dropdown-item"
+      (click)="
+        locationChip.selectFilter('My Drive');
+        selectFilter('My Drive', 'location')
+      "
+    >
+      My Drive
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        locationChip.selectFilter('Shared drives');
+        selectFilter('Shared drives', 'location')
+      "
+    >
+      Shared drives
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        locationChip.selectFilter('Shared with me');
+        selectFilter('Shared with me', 'location')
+      "
+    >
+      Shared with me
+    </div>
+    <div
+      class="dropdown-item"
+      (click)="
+        locationChip.selectFilter('Trash'); selectFilter('Trash', 'location')
+      "
+    >
+      Trash
+    </div>
+  </app-filter-chip>
+</div>

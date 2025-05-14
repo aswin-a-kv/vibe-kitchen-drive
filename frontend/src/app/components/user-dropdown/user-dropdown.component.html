@@ -1,0 +1,38 @@
+<div class="user-dropdown-container">
+  <!-- Show login button if not logged in -->
+  <div *ngIf="(user$ | async) === null" class="login-button">
+    <button (click)="login()" class="google-signin-btn">
+      Sign in with Google
+    </button>
+  </div>
+
+  <!-- Show user avatar if logged in -->
+  <div
+    *ngIf="user$ | async as user"
+    class="user-profile"
+    (click)="toggleDropdown($event)"
+  >
+    <img
+      [src]="user.photoURL ? user.photoURL : 'assets/default-avatar.png'"
+      alt="User avatar"
+      class="avatar-img"
+    />
+
+    <!-- Dropdown menu -->
+    <div *ngIf="showDropdown" class="dropdown-menu">
+      <div class="dropdown-header">
+        <img
+          [src]="user.photoURL ? user.photoURL : 'assets/default-avatar.png'"
+          alt="User avatar"
+          class="dropdown-avatar"
+        />
+        <div class="user-info">
+          <div class="user-name">{{ user.displayName }}</div>
+          <div class="user-email">{{ user.email }}</div>
+        </div>
+      </div>
+      <div class="dropdown-divider"></div>
+      <div class="dropdown-item" (click)="logout()">Sign out</div>
+    </div>
+  </div>
+</div>

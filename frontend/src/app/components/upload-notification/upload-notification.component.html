@@ -1,0 +1,126 @@
+<div class="upload-notification-container" *ngIf="showNotification">
+  <div class="notification-card" [class.expanded]="expanded">
+    <!-- Header -->
+    <div class="notification-header" (click)="toggleExpand()">
+      <div class="notification-title">
+        <span *ngIf="completedCount > 0 && uploads.length === completedCount">
+          {{ completedCount }} upload{{ getPluralSuffix(completedCount) }}
+          complete
+        </span>
+        <span *ngIf="hasActiveUploads()">
+          Uploading
+          {{ getActiveUploadsCount() }}
+          file{{ getPluralSuffix(getActiveUploadsCount()) }}...
+        </span>
+        <span *ngIf="errorCount > 0 && !hasActiveUploads()">
+          {{ errorCount }} upload{{ getPluralSuffix(errorCount) }} failed
+        </span>
+      </div>
+
+      <div class="notification-actions">
+        <button
+          class="expand-btn"
+          (click)="toggleExpand(); $event.stopPropagation()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            *ngIf="!expanded"
+          >
+            <path
+              d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+              fill="currentColor"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            *ngIf="expanded"
+          >
+            <path
+              d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <button class="close-btn" (click)="dismiss(); $event.stopPropagation()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+          >
+            <path
+              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- File List (visible when expanded) -->
+    <div class="file-list" *ngIf="expanded">
+      <div class="file-item" *ngFor="let upload of uploads">
+        <div class="file-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            *ngIf="upload.uploading"
+          >
+            <path
+              d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6z"
+              fill="#4285F4"
+            />
+            <path d="M14 3v5h5" stroke="white" stroke-width="1" />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            *ngIf="upload.success"
+          >
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+              fill="#0F9D58"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            *ngIf="upload.error"
+          >
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+              fill="#DB4437"
+            />
+          </svg>
+        </div>
+
+        <div class="file-details">
+          <div class="file-name">{{ upload.fileName }}</div>
+          <div class="file-status" *ngIf="upload.uploading">
+            <div class="progress-container">
+              <div class="progress-bar" [style.width.%]="upload.progress"></div>
+            </div>
+          </div>
+          <div class="file-status success" *ngIf="upload.success">
+            Completed
+          </div>
+          <div class="file-status error" *ngIf="upload.error">
+            {{ upload.error }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

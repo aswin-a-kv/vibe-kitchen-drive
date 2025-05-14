@@ -1,0 +1,69 @@
+<div class="folder-item">
+  <!-- Folder icon based on type -->
+  <div class="folder-icon" [ngClass]="iconType">
+    <ng-container [ngSwitch]="iconType">
+      <!-- Shared folder icon -->
+      <svg
+        *ngSwitchCase="'shared'"
+        xmlns="http://www.w3.org/2000/svg"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+      >
+        <path
+          d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-5 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 8h-8v-1c0-1.33 2.67-2 4-2s4 .67 4 2v1z"
+          fill="currentColor"
+        />
+      </svg>
+
+      <!-- Document icon -->
+      <svg
+        *ngSwitchCase="'document'"
+        xmlns="http://www.w3.org/2000/svg"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+      >
+        <path
+          d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+          fill="currentColor"
+        />
+      </svg>
+
+      <!-- Default folder icon -->
+      <svg
+        *ngSwitchDefault
+        xmlns="http://www.w3.org/2000/svg"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+      >
+        <path
+          d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+          fill="currentColor"
+        />
+      </svg>
+    </ng-container>
+  </div>
+
+  <!-- Folder info -->
+  <div class="folder-info">
+    <div class="folder-name">{{ name }}</div>
+    <div class="folder-location">{{ location }}</div>
+  </div>
+
+  <!-- Menu button -->
+  <button class="folder-menu" (click)="onMenuClick($event)">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24"
+      viewBox="0 0 24 24"
+      width="24"
+    >
+      <path
+        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+        fill="currentColor"
+      />
+    </svg>
+  </button>
+</div>

@@ -1,0 +1,34 @@
+<div class="app-container">
+  <!-- Header component -->
+  <app-header class="app-header"></app-header>
+
+  <!-- Main content area with 3 sections -->
+  <div class="main-content">
+    <!-- Left sidebar/navigation -->
+    <div class="left-sidebar">
+      <app-sidebar></app-sidebar>
+    </div>
+
+    <!-- Center content with router outlet -->
+    <div class="center-content">
+      <!-- Toggle button for right panel -->
+      <button
+        [class.opened]="!isPanelCollapsed"
+        class="panel-toggle"
+        (click)="toggleRightPanel()"
+      >
+        <img src="assets/assets/info.svg" alt="Icon" />
+      </button>
+
+      <router-outlet></router-outlet>
+    </div>
+
+    <!-- Right details panel (collapsible) -->
+    <div class="right-panel" [class.collapsed]="isPanelCollapsed">
+      <app-details-panel></app-details-panel>
+    </div>
+  </div>
+
+  <!-- Upload notification toast -->
+  <app-upload-notification></app-upload-notification>
+</div>

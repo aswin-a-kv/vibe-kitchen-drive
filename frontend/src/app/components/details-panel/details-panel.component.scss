@@ -1,0 +1,25 @@
+.details-panel-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding: 16px;
+}
+
+.empty-state {
+  display: flex;
+  margin-top: 80px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  img {
+    margin-bottom: 24px;
+  }
+
+  .empty-message {
+    font-size: 16px;
+    color: #5f6368;
+    margin: 0;
+  }
+}

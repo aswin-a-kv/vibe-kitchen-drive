@@ -1,0 +1,168 @@
+<div class="accordion-container">
+  <!-- Accordion header -->
+  <div class="accordion-header" (click)="toggleAccordion()">
+    <div class="header-left">
+      <div class="toggle-icon" [class.expanded]="isExpanded">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24"
+          viewBox="0 0 24 24"
+          width="24"
+        >
+          <path
+            d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+      <h3 class="accordion-title">Suggested files</h3>
+    </div>
+
+    <!-- View options toggle (list/grid) -->
+    <div class="view-options">
+      <div class="view-toggle">
+        <button class="toggle-btn list active">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+          >
+            <path
+              d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <button class="toggle-btn grid">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="20"
+            viewBox="0 0 24 24"
+            width="20"
+          >
+            <path
+              d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accordion content -->
+  <div class="accordion-content" [class.expanded]="isExpanded">
+    <div
+      class="files-table"
+      [class.drag-over]="isDraggingOver"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      <!-- Drag file overlay -->
+      <div class="drag-overlay" *ngIf="isDraggingOver">
+        <div class="overlay-content">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="48"
+            viewBox="0 0 24 24"
+            width="48"
+          >
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#4285F4" />
+          </svg>
+          <h3>Drop files here</h3>
+        </div>
+      </div>
+
+      <!-- Table header -->
+      <div class="table-header">
+        <div class="col-name">Name</div>
+        <div class="col-reason">Reason suggested</div>
+        <div class="col-owner">Owner</div>
+        <div class="col-location">Location</div>
+        <div class="col-actions"></div>
+      </div>
+
+      <!-- Table rows -->
+      <div class="table-body">
+        <div class="table-row" *ngFor="let file of suggestedFiles">
+          <!-- Name column with icon -->
+          <div class="col-name">
+            <div
+              class="file-icon"
+              [innerHTML]="getFileIcon(file.fileType)"
+            ></div>
+            <span class="file-name">{{ file.name }}</span>
+            <span class="shared-indicator" *ngIf="file.isShared">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="16"
+                viewBox="0 0 24 24"
+                width="16"
+              >
+                <path
+                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  fill="#5F6368"
+                />
+              </svg>
+            </span>
+          </div>
+
+          <!-- Reason column -->
+          <div class="col-reason">{{ file.reason }} • {{ file.date }}</div>
+
+          <!-- Owner column with avatar -->
+          <div class="col-owner">
+            <div class="owner-avatar">
+              <img
+                [src]="
+                  file.owner === 'me'
+                    ? profilePhotoUrl
+                    : 'assets/default-avatar.png'
+                "
+                alt="User avatar"
+              />
+            </div>
+            <span>{{ file.owner }}</span>
+          </div>
+
+          <!-- Location column -->
+          <div class="col-location">
+            <div class="location-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="18"
+                viewBox="0 0 24 24"
+                width="18"
+              >
+                <path
+                  d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+                  fill="#5F6368"
+                />
+              </svg>
+            </div>
+            <span>{{ file.location }}</span>
+          </div>
+
+          <!-- Actions column -->
+          <div class="col-actions">
+            <button class="menu-btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 0 24 24"
+                width="24"
+              >
+                <path
+                  d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                  fill="#5F6368"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

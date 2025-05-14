@@ -1,0 +1,77 @@
+<div class="sidebar-container">
+  <div class="nav-items">
+    <div *ngFor="let item of navItems" class="nav-item-container">
+      <div
+        class="nav-item"
+        [class.highlighted]="item.highlighted"
+        [class.storage-item]="item.type === 'storage'"
+      >
+        <!-- New button gets special styling -->
+        <div *ngIf="item.id === 'new'" class="new-button">
+          <img
+            class="add-icon"
+            src="assets/sidebar-icons/add-icon.svg"
+            alt="Icon"
+          />
+          <span class="item-label">{{ item.label }}</span>
+        </div>
+
+        <!-- Regular nav items -->
+        <div
+          *ngIf="item.id !== 'new' && item.type !== 'storage'"
+          class="item-content"
+          (click)="isFolder(item) ? toggleFolder(item) : navigateTo(item)"
+        >
+          <!-- Expandable folder arrow -->
+          <div class="expand-arrow" *ngIf="isFolder(item)">
+            <span>{{ item.expanded ? "▼" : "▶" }}</span>
+          </div>
+          <span class="item-icon">
+            <img [src]="'assets/sidebar-icons/' + item.icon" alt="Icon" />
+          </span>
+          <span class="item-label">{{ item.label }}</span>
+        </div>
+
+        <!-- Storage section -->
+        <div *ngIf="item.type === 'storage'" class="storage-section">
+          <div class="storage-header">
+            <span class="item-icon">
+              <img [src]="'assets/sidebar-icons/' + item.icon" alt="Icon" />
+            </span>
+            <span class="item-label">{{ item.label }}</span>
+          </div>
+          <div class="storage-bar">
+            <div class="storage-used" style="width: 71%"></div>
+          </div>
+          <div class="storage-details">
+            {{ storageUsed }}
+          </div>
+          <button class="storage-btn">Get more storage</button>
+        </div>
+      </div>
+
+      <!-- Child items (expandable folders) - directly beneath parent -->
+      <div
+        *ngIf="isFolder(item) && item.expanded && item.children"
+        class="child-items"
+      >
+        <div
+          *ngFor="let child of item.children"
+          class="nav-item child-item"
+          [class.highlighted]="child.highlighted"
+        >
+          <div class="item-content child-content">
+            <!-- Sub-folder expandable arrow (not implemented) -->
+            <div class="expand-arrow" *ngIf="isFolder(child)">
+              <span>▶</span>
+            </div>
+            <span class="item-icon">
+              <img [src]="'assets/sidebar-icons/' + child.icon" alt="Icon" />
+            </span>
+            <span class="item-label">{{ child.label }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

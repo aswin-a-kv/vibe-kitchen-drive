@@ -1,0 +1,49 @@
+<div class="trash-container">
+  <div class="trash-header">
+    <h1>Trash</h1>
+
+    <div class="view-controls">
+      <div class="toggle-button-group">
+        <button class="toggle-button active">
+          <i class="list-view-icon"></i>
+        </button>
+        <button class="toggle-button">
+          <i class="grid-view-icon"></i>
+        </button>
+      </div>
+      <button class="info-button">
+        <i class="info-icon"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="filter-group">
+      <button class="filter-button">
+        Type
+        <span class="dropdown-arrow">▼</span>
+      </button>
+      <button class="filter-button">
+        Modified
+        <span class="dropdown-arrow">▼</span>
+      </button>
+      <button class="filter-button">
+        Source
+        <span class="dropdown-arrow">▼</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="trashIsEmpty" class="empty-state">
+    <div class="empty-image-container">
+      <img
+        src="assets/images/empty_state_trash.svg"
+        alt="Empty trash"
+        class="empty-image"
+      />
+    </div>
+    <h2>Trash is empty</h2>
+    <p>Items moved to the trash will be deleted forever after 30 days</p>
+  </div>
+</div>

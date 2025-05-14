@@ -1,0 +1,31 @@
+.home-container {
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .filters-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .folders-wrapper {
+    margin-top: 1rem;
+    padding: 0 16px;
+    margin-bottom: 2rem;
+  }
+
+  .files-wrapper {
+    margin-top: 1rem;
+    padding: 0 16px;
+  }
+}
