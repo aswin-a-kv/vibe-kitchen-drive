@@ -15,11 +15,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import com.simpledrive.service.AccessControlService;
+
 @RestController
 @RequestMapping("/files")
 public class FileController {
     @Autowired
     private FileRepository fileRepository;
+
+    @Autowired
+    private AccessControlService accessControlService;
 
     @Value("${cloud.gcs.bucket}")
     private String gcsBucket;
@@ -29,20 +34,24 @@ public class FileController {
     }
 
     @GetMapping
-    public List<File> listFiles(@RequestParam(required = false) Long parentId) {
-        if (parentId == null) {
-            return fileRepository.findAll();
-        } else {
-            return fileRepository.findByParent_FileId(parentId);
-        }
+    public List<File> listFiles(@RequestParam("ownerEmail") String ownerEmail, @RequestParam(required = false) Long parentId) {
+        List<File> files = (parentId == null) ? fileRepository.findAll() : fileRepository.findByParentFileId(parentId);
+        return files.stream().filter(f -> accessControlService.hasPermission(ownerEmail, f, "viewer")).toList();
     }
 
     @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<File> uploadFile(
+    public ResponseEntity<?> uploadFile(
             @RequestParam("file") MultipartFile file,
             @RequestParam("ownerEmail") String ownerEmail,
             @RequestParam(value = "parentId", required = false) Long parentId
     ) throws IOException {
+        File parent = null;
+        if (parentId != null) {
+            parent = fileRepository.findById(parentId).orElse(null);
+            if (parent != null && !accessControlService.hasPermission(ownerEmail, parent, "editor")) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No write access to parent folder");
+            }
+        }
         String objectName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         Storage storage = getGcsClient();
         BlobId blobId = BlobId.of(gcsBucket, objectName);
@@ -59,8 +68,8 @@ public class FileController {
         dbFile.setContentType(file.getContentType());
         dbFile.setOwnerEmail(ownerEmail);
         dbFile.setSignedUrl(signedUrl);
-        if (parentId != null) {
-            dbFile.setParent(fileRepository.findById(parentId).orElse(null));
+        if (parent != null) {
+            dbFile.setParent(parent);
         }
         fileRepository.save(dbFile);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -69,7 +78,14 @@ public class FileController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<File> createFolder(@RequestBody FolderRequest folderRequest) {
+    public ResponseEntity<?> createFolder(@RequestBody FolderRequest folderRequest, @RequestParam("ownerEmail") String ownerEmail) {
+        File parent = null;
+        if (folderRequest.getParentId() != null) {
+            parent = fileRepository.findById(folderRequest.getParentId()).orElse(null);
+            if (parent != null && !accessControlService.hasPermission(ownerEmail, parent, "editor")) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No write access to parent folder");
+            }
+        }
         File folder = new File();
         folder.setName(folderRequest.getName());
         folder.setIsFolder(true);
@@ -78,25 +94,28 @@ public class FileController {
         folder.setUpdatedAt(Instant.now());
         folder.setStorageKey("");
         folder.setContentType("folder");
-        folder.setOwnerEmail(folderRequest.getOwnerEmail());
-        if (folderRequest.getParentId() != null) {
-            folder.setParent(fileRepository.findById(folderRequest.getParentId()).orElse(null));
+        folder.setOwnerEmail(ownerEmail);
+        if (parent != null) {
+            folder.setParent(parent);
         }
         fileRepository.save(folder);
         return ResponseEntity.status(HttpStatus.CREATED).body(folder);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<File> getFile(@PathVariable Long id) {
+    public ResponseEntity<?> getFile(@PathVariable Long id, @RequestParam("ownerEmail") String ownerEmail) {
         Optional<File> file = fileRepository.findById(id);
-        return file.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (file.isEmpty() || !accessControlService.hasPermission(ownerEmail, file.get(), "viewer")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No read access");
+        }
+        return ResponseEntity.ok(file.get());
     }
 
     @GetMapping("/{id}/download")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) throws IOException {
+    public ResponseEntity<?> downloadFile(@PathVariable Long id, @RequestParam("ownerEmail") String ownerEmail) throws IOException {
         Optional<File> fileOpt = fileRepository.findById(id);
-        if (fileOpt.isEmpty() || fileOpt.get().getIsFolder()) {
-            return ResponseEntity.notFound().build();
+        if (fileOpt.isEmpty() || fileOpt.get().getIsFolder() || !accessControlService.hasPermission(ownerEmail, fileOpt.get(), "viewer")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No read access");
         }
         File file = fileOpt.get();
         Storage storage = getGcsClient();
@@ -109,9 +128,11 @@ public class FileController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<File> renameOrMoveFile(@PathVariable Long id, @RequestBody FileUpdateRequest req) {
+    public ResponseEntity<?> renameOrMoveFile(@PathVariable Long id, @RequestBody FileUpdateRequest req, @RequestParam("ownerEmail") String ownerEmail) {
         Optional<File> fileOpt = fileRepository.findById(id);
-        if (fileOpt.isEmpty()) return ResponseEntity.notFound().build();
+        if (fileOpt.isEmpty() || !accessControlService.hasPermission(ownerEmail, fileOpt.get(), "editor")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No write access");
+        }
         File file = fileOpt.get();
         if (req.getName() != null) file.setName(req.getName());
         if (req.getParentId() != null) file.setParent(fileRepository.findById(req.getParentId()).orElse(null));
@@ -121,9 +142,11 @@ public class FileController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFile(@PathVariable Long id) {
+    public ResponseEntity<?> deleteFile(@PathVariable Long id, @RequestParam("ownerEmail") String ownerEmail) {
         Optional<File> fileOpt = fileRepository.findById(id);
-        if (fileOpt.isEmpty()) return ResponseEntity.notFound().build();
+        if (fileOpt.isEmpty() || !accessControlService.hasPermission(ownerEmail, fileOpt.get(), "editor")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No write access");
+        }
         File file = fileOpt.get();
         if (file.getIsFolder()) {
             deleteFolderRecursively(file.getFileId());
@@ -134,7 +157,7 @@ public class FileController {
     }
 
     private void deleteFolderRecursively(Long folderId) {
-        List<File> children = fileRepository.findByParent_FileId(folderId);
+        List<File> children = fileRepository.findByParentFileId(folderId);
         for (File child : children) {
             if (Boolean.TRUE.equals(child.getIsFolder())) {
                 deleteFolderRecursively(child.getFileId());
