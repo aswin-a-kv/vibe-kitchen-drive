@@ -3,12 +3,14 @@ package com.simpledrive.entity;
 import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "files")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +18,7 @@ public class File {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_file_id")
+    @JsonIgnoreProperties("parent")
     private File parent;
 
     @Column(nullable = false)
