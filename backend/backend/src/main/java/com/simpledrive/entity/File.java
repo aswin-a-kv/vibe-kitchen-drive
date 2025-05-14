@@ -18,9 +18,8 @@ public class File {
     @JoinColumn(name = "parent_file_id")
     private File parent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
+    @Column(nullable = false)
+    private String ownerEmail;
 
     @Column(nullable = false)
     private String name;
@@ -42,4 +41,7 @@ public class File {
 
     @Column(nullable = false)
     private String contentType;
+
+    @Column(length = 1024)
+    private String signedUrl;
 } 

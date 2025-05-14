@@ -20,9 +20,8 @@ public class ShareLink {
     @Column(nullable = false)
     private Instant expiresAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)
-    private User createdBy;
+    @Column(nullable = false)
+    private String createdByEmail;
 
     // Getters and setters
     // ... (omitted for brevity)
